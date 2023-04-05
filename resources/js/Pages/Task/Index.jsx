@@ -18,6 +18,17 @@ export default function Index({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
+                        <div className="flex justify-between mb-4 px-4">
+                            <div>
+                                <h3 className="font-bold text-2xl">Tasks</h3>
+                            </div>
+                            <div>
+                                <PrimaryButton className="ml-4 bg-green-500 hover:bg-green-600">
+                                    <i class="bx bx-plus mr-2"></i>
+                                    <span>Add</span>
+                                </PrimaryButton>
+                            </div>
+                        </div>
                         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
