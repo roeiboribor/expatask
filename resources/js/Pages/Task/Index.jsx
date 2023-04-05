@@ -39,8 +39,7 @@ export default function Index({ auth, tasks }) {
     //     }));
     // }
     const handleIsCompleted = (id) => {
-        const test = router.get(route("tasks.is_completed", id));
-        console.log(test);
+        router.post(route("tasks.is_completed", id));
     };
 
     const showAddTaskModal = (e) => {
@@ -50,6 +49,10 @@ export default function Index({ auth, tasks }) {
 
     const closeModal = () => {
         setAddTaskModalVisible(false);
+    };
+
+    const handleTaskDelete = (id) => {
+        router.delete(route("tasks.destroy", id));
     };
 
     function handleSubmit(e) {
@@ -160,6 +163,9 @@ export default function Index({ auth, tasks }) {
                                                     </SecondaryButton>
                                                     <SecondaryButton
                                                         type="button"
+                                                        onClick={(e) =>
+                                                            handleTaskDelete(id)
+                                                        }
                                                         className="font-medium text-red-600 hover:underline"
                                                     >
                                                         Delete

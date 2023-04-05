@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('tasks', TaskController::class);
-    Route::get('tasks/{id}/is_completed', [TaskController::class, 'updateIsCompleted'])->name('tasks.is_completed');
+    Route::post('tasks/{id}/is_completed', [TaskController::class, 'updateIsCompleted'])->name('tasks.is_completed');
 });
 
 require __DIR__ . '/auth.php';
