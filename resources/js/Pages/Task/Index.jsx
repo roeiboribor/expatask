@@ -39,8 +39,8 @@ export default function Index({ auth, tasks }) {
     //     }));
     // }
     const handleIsCompleted = (id) => {
-        router.get(route("tasks.edit", id));
-        console.log(task);
+        const test = router.get(route("tasks.is_completed", id));
+        console.log(test);
     };
 
     const showAddTaskModal = (e) => {

@@ -48,14 +48,6 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        return Inertia::render('Task/Index', [
-            'task' => [
-                'id' => $task->id,
-                'title' => $task->title,
-                'description' => $task->description,
-                'is_completed' => $task->is_completed
-            ]
-        ]);
     }
 
     /**
@@ -72,5 +64,11 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
+    }
+
+    public function updateIsCompleted($id)
+    {
+        $task = Task::find($id);
+        $task->update(['is_completed' => !$task->is_completed]);
     }
 }
