@@ -13,7 +13,7 @@ import TextInput from "@/Components/TextInput";
 export default function Index({ auth, tasks }) {
     const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
 
-    const { data, setData, errors } = useForm({
+    const { data, setData, reset, errors } = useForm({
         title: "",
         description: "",
         is_completed: false,
@@ -58,6 +58,7 @@ export default function Index({ auth, tasks }) {
     function handleSubmit(e) {
         e.preventDefault();
         router.post(route("tasks.store"), data);
+        reset();
         setAddTaskModalVisible(false);
         // task(route("task.store"));
     }
