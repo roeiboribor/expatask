@@ -1,9 +1,54 @@
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+
+import { Head, router, useForm } from "@inertiajs/react";
+import { useRef, useState } from "react";
+
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import Modal from "@/Components/Modal";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import TextInput from "@/Components/TextInput";
 
 export default function Index({ auth }) {
+    const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
+    const { data, setData, errors, task } = useForm({
+        title: "",
+        description: "",
+        is_completed: false,
+    });
+
+    const titleInput = useRef();
+
+    // const [values, setValues] = useState({
+    //     title: "",
+    //     description: "",
+    //     is_completed: false,
+    // });
+
+    // function handleChange(e) {
+    //     const key = e.target.id;
+    //     const value = e.target.value;
+    //     setValues((values) => ({
+    //         ...values,
+    //         [key]: value,
+    //     }));
+    // }
+
+    const showAddTaskModal = (e) => {
+        e.preventDefault();
+        setAddTaskModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setAddTaskModalVisible(false);
+    };
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        router.post("/tasks", values);
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -23,8 +68,12 @@ export default function Index({ auth }) {
                                 <h3 className="font-bold text-2xl">Tasks</h3>
                             </div>
                             <div>
-                                <PrimaryButton className="ml-4 bg-green-500 hover:bg-green-600">
-                                    <i class="bx bx-plus mr-2"></i>
+                                <PrimaryButton
+                                    type="button"
+                                    onClick={showAddTaskModal}
+                                    className="ml-4 bg-green-500 hover:bg-green-600"
+                                >
+                                    <i className="bx bx-plus mr-2"></i>
                                     <span>Add</span>
                                 </PrimaryButton>
                             </div>
@@ -60,7 +109,7 @@ export default function Index({ auth }) {
                                                 id="default-checkbox"
                                                 type="checkbox"
                                                 value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                             />
                                         </th>
                                         <th
@@ -94,6 +143,59 @@ export default function Index({ auth }) {
                         </div>
                     </div>
                 </div>
+
+                <Modal show={addTaskModalVisible} onClose={closeModal}>
+                    <form onSubmit={handleSubmit} className="p-6">
+                        <div className="mb-4">
+                            <InputLabel htmlFor="title">
+                                Title <span className="text-red-500">*</span>
+                            </InputLabel>
+
+                            <TextInput
+                                id="title"
+                                type="text"
+                                name="title"
+                                ref={titleInput}
+                                value={values.title}
+                                onChange={handleChange}
+                                className="mt-1 w-full"
+                                isFocused
+                                required
+                                placeholder="Enter Title..."
+                            />
+                            <InputError
+                                message={errors.title}
+                                className="mt-2"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <InputLabel htmlFor="description">
+                                Description
+                                <span className="text-red-500">*</span>
+                            </InputLabel>
+
+                            <textarea
+                                id="description"
+                                type="text"
+                                name="description"
+                                onChange={handleChange}
+                                value={values.description}
+                                placeholder="Enter Description..."
+                                className="w-full resize-none mt-1 h-[200px] border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                            />
+                        </div>
+
+                        <div className="mt-6 flex justify-end">
+                            <PrimaryButton type="submit" className="mr-3">
+                                Save
+                            </PrimaryButton>
+
+                            <SecondaryButton onClick={closeModal}>
+                                Cancel
+                            </SecondaryButton>
+                        </div>
+                    </form>
+                </Modal>
             </div>
         </AuthenticatedLayout>
     );
