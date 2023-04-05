@@ -48,6 +48,13 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        return Inertia::render('Task/Index', [
+            'task' => [
+                'id' => $task->id,
+                'title' => $task->title,
+                'description' => $task->description
+            ]
+        ]);
     }
 
     /**

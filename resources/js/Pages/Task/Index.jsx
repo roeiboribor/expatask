@@ -11,7 +11,14 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 
 export default function Index({ auth, tasks }) {
+    const { task } = usePage().props;
     const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
+    const [editTaskModalVisible, setEditTaskModalVisible] = useState(false);
+
+    const [values, setValues] = useState({
+        title: "",
+        description: "",
+    });
 
     const { data, setData, reset, errors } = useForm({
         title: "",
@@ -47,8 +54,19 @@ export default function Index({ auth, tasks }) {
         setAddTaskModalVisible(true);
     };
 
+    const showEditTaskModal = (id) => {
+        // event.preventDefault();
+        // const test = router.get(route("tasks.get_task", id));
+        // console.log(test);
+        setEditTaskModalVisible(true);
+    };
+
     const closeModal = () => {
         setAddTaskModalVisible(false);
+    };
+
+    const closeEditModal = () => {
+        setEditTaskModalVisible(false);
     };
 
     const handleTaskDelete = (id) => {
@@ -61,6 +79,23 @@ export default function Index({ auth, tasks }) {
         reset();
         setAddTaskModalVisible(false);
         // task(route("task.store"));
+    }
+
+    function handleUpdateSubmit(e) {
+        e.preventDefault();
+        // router.post(route("tasks.store"), data);
+        // reset();
+        // setEditTaskModalVisible(false);
+        // task(route("task.store"));
+    }
+
+    function handleChange(e) {
+        const key = e.target.id;
+        const value = e.target.value;
+        setValues((values) => ({
+            ...values,
+            [key]: value,
+        }));
     }
 
     return (
@@ -158,6 +193,11 @@ export default function Index({ auth, tasks }) {
                                                 <td className="px-6 py-4 flex space-x-2">
                                                     <SecondaryButton
                                                         type="button"
+                                                        onClick={(e) =>
+                                                            showEditTaskModal(
+                                                                id
+                                                            )
+                                                        }
                                                         className="font-medium text-blue-600 hover:underline"
                                                     >
                                                         Edit
@@ -203,7 +243,7 @@ export default function Index({ auth, tasks }) {
                                 type="text"
                                 name="title"
                                 ref={titleInput}
-                                value={data.title}
+                                value={values.title}
                                 onChange={(e) =>
                                     setData("title", e.target.value)
                                 }
@@ -229,9 +269,9 @@ export default function Index({ auth, tasks }) {
                                 name="description"
                                 required
                                 errors={errors.description}
-                                value={data.description}
+                                value={values.description}
                                 onChange={(e) =>
-                                    setData("description", e.target.value)
+                                    set("description", e.target.value)
                                 }
                                 placeholder="Enter Description..."
                                 className="w-full resize-none mt-1 h-[200px] border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
@@ -244,6 +284,60 @@ export default function Index({ auth, tasks }) {
                             </PrimaryButton>
 
                             <SecondaryButton onClick={closeModal}>
+                                Cancel
+                            </SecondaryButton>
+                        </div>
+                    </form>
+                </Modal>
+
+                <Modal show={editTaskModalVisible} onClose={closeEditModal}>
+                    <form onSubmit={handleUpdateSubmit} className="p-6">
+                        <div className="mb-4">
+                            <InputLabel htmlFor="title">
+                                Title <span className="text-red-500">*</span>
+                            </InputLabel>
+
+                            <TextInput
+                                id="title"
+                                type="text"
+                                name="title"
+                                ref={titleInput}
+                                value={values.title}
+                                onChange={handleChange}
+                                className="mt-1 w-full"
+                                isFocused
+                                required
+                                placeholder="Enter Title..."
+                            />
+                            <InputError
+                                message={errors.title}
+                                className="mt-2"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <InputLabel htmlFor="description">
+                                Description
+                                <span className="text-red-500">*</span>
+                            </InputLabel>
+
+                            <textarea
+                                id="description"
+                                type="text"
+                                name="description"
+                                required
+                                value={values.description}
+                                onChange={handleChange}
+                                placeholder="Enter Description..."
+                                className="w-full resize-none mt-1 h-[200px] border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                            />
+                        </div>
+
+                        <div className="mt-6 flex justify-end">
+                            <PrimaryButton type="submit" className="mr-3">
+                                Save
+                            </PrimaryButton>
+
+                            <SecondaryButton onClick={closeEditModal}>
                                 Cancel
                             </SecondaryButton>
                         </div>

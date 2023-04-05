@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tasks', TaskController::class);
     Route::post('tasks/{id}/is_completed', [TaskController::class, 'updateIsCompleted'])->name('tasks.is_completed');
+    Route::get('tasks/{id}/get-task', [TaskController::class, 'getTask'])->name('tasks.get_task');
 });
 
 require __DIR__ . '/auth.php';
