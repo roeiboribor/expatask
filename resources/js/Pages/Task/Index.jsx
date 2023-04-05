@@ -1,3 +1,5 @@
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
@@ -16,35 +18,69 @@ export default function Index({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-4">
-                        <table className="table-fixed w-full">
-                            <thead>
-                                <tr>
-                                    <th>Song</th>
-                                    <th>Artist</th>
-                                    <th>Year</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        The Sliding Mr. Bones (Next Stop,
-                                        Pottersville)
-                                    </td>
-                                    <td>Malcolm Lockyer</td>
-                                    <td>1961</td>
-                                </tr>
-                                <tr>
-                                    <td>Witchy Woman</td>
-                                    <td>The Eagles</td>
-                                    <td>1972</td>
-                                </tr>
-                                <tr>
-                                    <td>Shining Star</td>
-                                    <td>Earth, Wind, and Fire</td>
-                                    <td>1975</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-center"
+                                        >
+                                            Completed
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Title
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Description
+                                        </th>
+                                        <th scope="col" className="px-6 py-3">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                        <th
+                                            scope="row"
+                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                                        >
+                                            <input
+                                                id="default-checkbox"
+                                                type="checkbox"
+                                                value=""
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                            />
+                                        </th>
+                                        <th
+                                            scope="row"
+                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                        >
+                                            Title
+                                        </th>
+                                        <td className="px-6 py-4">
+                                            Lorem ipsum dolor sit amet
+                                            consectetur, adipisicing elit. Rem,
+                                            sunt.
+                                        </td>
+                                        <td className="px-6 py-4 flex space-x-2">
+                                            <SecondaryButton
+                                                type="button"
+                                                className="font-medium text-blue-600 hover:underline"
+                                            >
+                                                Edit
+                                            </SecondaryButton>
+                                            <SecondaryButton
+                                                type="button"
+                                                className="font-medium text-red-600 hover:underline"
+                                            >
+                                                Delete
+                                            </SecondaryButton>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
