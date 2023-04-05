@@ -38,6 +38,10 @@ export default function Index({ auth, tasks }) {
     //         [key]: value,
     //     }));
     // }
+    const handleIsCompleted = (id) => {
+        router.get(route("tasks.edit", id));
+        console.log(task);
+    };
 
     const showAddTaskModal = (e) => {
         e.preventDefault();
@@ -130,6 +134,11 @@ export default function Index({ auth, tasks }) {
                                                                 ? "True"
                                                                 : ""
                                                         }
+                                                        onChange={(e) =>
+                                                            handleIsCompleted(
+                                                                id
+                                                            )
+                                                        }
                                                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                     />
                                                 </th>
@@ -211,6 +220,7 @@ export default function Index({ auth, tasks }) {
                                 id="description"
                                 type="text"
                                 name="description"
+                                required
                                 errors={errors.description}
                                 value={data.description}
                                 onChange={(e) =>

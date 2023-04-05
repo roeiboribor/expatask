@@ -41,7 +41,6 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
     }
 
     /**
@@ -49,7 +48,14 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return Inertia::render('Task/Index', [
+            'task' => [
+                'id' => $task->id,
+                'title' => $task->title,
+                'description' => $task->description,
+                'is_completed' => $task->is_completed
+            ]
+        ]);
     }
 
     /**
