@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-import { Head, router, useForm } from "@inertiajs/react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { useRef, useState } from "react";
 
 import InputError from "@/Components/InputError";
@@ -10,13 +10,17 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 
-export default function Index({ auth }) {
+export default function Index({ auth, tasks }) {
     const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
-    const { data, setData, errors, task } = useForm({
+
+    const { data, setData, errors } = useForm({
         title: "",
         description: "",
         is_completed: false,
     });
+
+    // const { tasks } = usePage().props;
+    // const { items } = tasks;
 
     const titleInput = useRef();
 
@@ -46,7 +50,9 @@ export default function Index({ auth }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        router.post("/tasks", values);
+        router.post(route("tasks.store"), data);
+        setAddTaskModalVisible(false);
+        // task(route("task.store"));
     }
 
     return (
@@ -100,44 +106,65 @@ export default function Index({ auth }) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                                        <th
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
-                                        >
-                                            <input
-                                                id="default-checkbox"
-                                                type="checkbox"
-                                                value=""
-                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                            />
-                                        </th>
-                                        <th
-                                            scope="row"
-                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                                        >
-                                            Title
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            Lorem ipsum dolor sit amet
-                                            consectetur, adipisicing elit. Rem,
-                                            sunt.
-                                        </td>
-                                        <td className="px-6 py-4 flex space-x-2">
-                                            <SecondaryButton
-                                                type="button"
-                                                className="font-medium text-blue-600 hover:underline"
+                                    {tasks.map(
+                                        ({
+                                            id,
+                                            title,
+                                            description,
+                                            is_completed,
+                                        }) => (
+                                            <tr
+                                                key={id}
+                                                className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
                                             >
-                                                Edit
-                                            </SecondaryButton>
-                                            <SecondaryButton
-                                                type="button"
-                                                className="font-medium text-red-600 hover:underline"
+                                                <th
+                                                    scope="row"
+                                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
+                                                >
+                                                    <input
+                                                        key={id}
+                                                        id={`checkbox-${id}`}
+                                                        type="checkbox"
+                                                        checked={!is_completed}
+                                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    />
+                                                </th>
+                                                <th
+                                                    scope="row"
+                                                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                                >
+                                                    {title}
+                                                </th>
+                                                <td className="px-6 py-4">
+                                                    {description}
+                                                </td>
+                                                <td className="px-6 py-4 flex space-x-2">
+                                                    <SecondaryButton
+                                                        type="button"
+                                                        className="font-medium text-blue-600 hover:underline"
+                                                    >
+                                                        Edit
+                                                    </SecondaryButton>
+                                                    <SecondaryButton
+                                                        type="button"
+                                                        className="font-medium text-red-600 hover:underline"
+                                                    >
+                                                        Delete
+                                                    </SecondaryButton>
+                                                </td>
+                                            </tr>
+                                        )
+                                    )}
+                                    {tasks.length === 0 && (
+                                        <tr>
+                                            <td
+                                                className="px-6 py-4 border-t"
+                                                colSpan="4"
                                             >
-                                                Delete
-                                            </SecondaryButton>
-                                        </td>
-                                    </tr>
+                                                No contacts found.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -156,8 +183,10 @@ export default function Index({ auth }) {
                                 type="text"
                                 name="title"
                                 ref={titleInput}
-                                value={values.title}
-                                onChange={handleChange}
+                                value={data.title}
+                                onChange={(e) =>
+                                    setData("title", e.target.value)
+                                }
                                 className="mt-1 w-full"
                                 isFocused
                                 required
@@ -178,8 +207,11 @@ export default function Index({ auth }) {
                                 id="description"
                                 type="text"
                                 name="description"
-                                onChange={handleChange}
-                                value={values.description}
+                                errors={errors.description}
+                                value={data.description}
+                                onChange={(e) =>
+                                    setData("description", e.target.value)
+                                }
                                 placeholder="Enter Description..."
                                 className="w-full resize-none mt-1 h-[200px] border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                             />

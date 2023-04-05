@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class TaskController extends Controller
@@ -14,7 +15,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Task/Index');
+        $tasks = Task::latest()->get();
+        return Inertia::render('Task/Index', ['tasks' => $tasks]);
     }
 
     /**
@@ -31,7 +33,7 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         Task::create($request->validated());
-        return Redirect::route('tasks.index')->with('success', 'Task has been added');
+        return redirect()->route('tasks.index')->with('success', 'Task has been added');
     }
 
     /**
